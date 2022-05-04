@@ -13,4 +13,5 @@ jobs:
           flutter-version: $FLUTTER_VERSION
           channel: $FLUTTER_CHANNEL
         name: Run Unit Tests
+      - run: flutter pub get
       - run: flutter test
