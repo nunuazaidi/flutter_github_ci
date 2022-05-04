@@ -9,5 +9,7 @@ jobs:
         with:
           flutter-version: '2.10.5'
           channel: 'stable'
+        name: Check Flutter Version
       - run: flutter --version
+        name: Run Unit Tests
       - run: flutter test
