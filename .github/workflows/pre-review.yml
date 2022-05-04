@@ -1,5 +1,8 @@
 name: pre-review
-on: push
+on:
+  push:
+    branches:
+      - '**-base'
 env:
   FLUTTER_VERSION: '2.10.5'
   FLUTTER_CHANNEL: 'stable'
