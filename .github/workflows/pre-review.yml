@@ -8,6 +8,7 @@ env:
   FLUTTER_CHANNEL: 'stable'
 jobs:
   pre-review-test:
+    if: github.repository_owner == 'saladthieves'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,6 +16,5 @@ jobs:
         with:
           flutter-version: $FLUTTER_VERSION
           channel: $FLUTTER_CHANNEL
-        name: Run Unit Tests
       - run: flutter pub get
-      - run: flutter test
+      - run: flutter test --no-pub
