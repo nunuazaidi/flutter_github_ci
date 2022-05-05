@@ -8,7 +8,7 @@ env:
   FLUTTER_CHANNEL: 'stable'
 jobs:
   pre-review-test:
-    if: github.repository.isFork == false
+    if: github.repository.fork
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
