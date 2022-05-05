@@ -1,14 +1,16 @@
-name: pre-review
+name: post-review
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - 'base'
 env:
   FLUTTER_VERSION: '2.10.5'
   FLUTTER_CHANNEL: 'stable'
 jobs:
-  pre-review-test:
-    if: github.repository_owner != 'saladthieves'
+  post-review-test:
+    if: github.repository_owner == 'saladthieves'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
