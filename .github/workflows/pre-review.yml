@@ -4,7 +4,7 @@ on:
     branches:
       - 'main'
 env:
-  FLUTTER_VERSION: '2.10.5'
+  FLUTTER_VERSION: '3.0.0'
   FLUTTER_CHANNEL: 'stable'
 jobs:
   pre-review-test:
