@@ -16,4 +16,5 @@ jobs:
           repository: nunuazaidi/shed
           token: ${{ secrets.SHED_ACCESS_TOKEN }}
           path: .
-      - uses: ./.github/actions/action.yaml
+      - uses: ./action.yaml
+      - run: shed --help
