@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - 'prepare-staging'
+
+env:
+  FLUTTER_VERSION: '3.0.0'
+  FLUTTER_CHANNEL: 'stable'
+
 jobs:
   staging-deploy:
     if: github.event.repository.fork == false
@@ -12,8 +17,13 @@ jobs:
         with:
           fetch-depth: '0'
       - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: $FLUTTER_VERSION
+          channel: $FLUTTER_CHANNEL
+      - uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
           token: ${{ secrets.SHED_ACCESS_TOKEN }}
-          path: .github/actions/
-      - run: ls -laR
+          path: ./shed
+      - run: ls -laR ./shed
