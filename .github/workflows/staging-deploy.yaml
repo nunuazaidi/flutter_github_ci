@@ -27,7 +27,7 @@ jobs:
       - run: |
             cd ./shed
             dart pub get
-            dart compile exe bin/shed.dart shed
+            dart compile exe bin/shed.dart -o shed
             cd ..
             echo "./shed" >> $GITHUB_PATH
       - run: shed --help
