@@ -1,0 +1,20 @@
+name: staging-deploy
+on:
+  push:
+    branches:
+      - 'prepare-staging'
+jobs:
+  staging-deploy:
+    if: github.event.repository.fork == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - uses: actions/checkout@v3
+        with:
+          repository: nunuazaidi/shed
+          token: ${{ secrets.SHED_ACCESS_TOKEN }}
+          path: .github/actions/main.yaml
+      - uses: ./.github/actions/main.yaml
+      - run: shed --help
