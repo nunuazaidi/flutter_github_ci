@@ -26,6 +26,10 @@ jobs:
           repository: nunuazaidi/shed
           token: ${{ secrets.SHED_ACCESS_TOKEN }}
           path: ./shed
-      - run: dart compile exe ./shed/bin/shed.dart -o ./shed
+      - run: cd ./shed
+      - run: dart pub get
+      - run: dart test
+      - run: dart compile exe bin/shed.dart -o shed
+      - run: cd ..
       - run: echo "./shed" >> $GITHUB_PATH
       - run: shed --help
