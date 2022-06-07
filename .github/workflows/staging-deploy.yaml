@@ -15,5 +15,5 @@ jobs:
         with:
           repository: nunuazaidi/shed
           token: ${{ secrets.SHED_ACCESS_TOKEN }}
-          path: .github/actions/main.yaml
+          path: .github/actions/
       - run: ls -laR
