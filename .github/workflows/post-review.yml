@@ -13,9 +13,9 @@ jobs:
     if: github.event.repository.fork == false && github.event.pull_request.merged
     runs-on: ubuntu-latest
     steps:
-      - name: "Checking out ${{ github.repository}} repository..."
+      - name: "Checking out ${{ github.repository }} repository..."
         uses: actions/checkout@v3
-      - name: "Downloading flutter v$FLUTTER_VERSION on channel $FLUTTER_CHANNEL..."
+      - name: "Downloading Flutter v${{FLUTTER_VERSION}} on channel ${{FLUTTER_CHANNEL}}..."
         uses: subosito/flutter-action@v2
         with:
           flutter-version: $FLUTTER_VERSION
