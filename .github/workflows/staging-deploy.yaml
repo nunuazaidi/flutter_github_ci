@@ -35,7 +35,7 @@ jobs:
           echo "./build/shed" >> $GITHUB_PATH
       - name: "Generating next release version..."
         run: |
-          NEXT_VERSION=$(shed changelog)
+          NEXT_VERSION=$(shed version)
           shed changelog --type=pretty --verbose
           shed changelog --type=raw --verbose
           shed version --update-pubspec --verbose
