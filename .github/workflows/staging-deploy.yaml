@@ -25,9 +25,9 @@ jobs:
           token: ${{ secrets.SHED_ACCESS_TOKEN }}
           path: ./shed
       - run: |
-            cd ./shed
-            dart pub get
-            dart compile exe bin/shed.dart -o shed
-            cd ..
-            echo "./shed" >> $GITHUB_PATH
+          cd ./shed
+          dart pub get
+          dart compile exe bin/shed.dart -o shed
+          cd ..
+          echo "./shed" >> $GITHUB_PATH
       - run: shed --help
