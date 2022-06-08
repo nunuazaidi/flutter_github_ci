@@ -30,4 +30,4 @@ jobs:
           dart compile exe bin/shed.dart -o shed
           cd ..
           echo "./shed" >> $GITHUB_PATH
-      - run: shed --help
+      - run: shed version
