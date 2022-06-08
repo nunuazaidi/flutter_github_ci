@@ -25,14 +25,17 @@ jobs:
         with:
           repository: nunuazaidi/shed
           token: ${{ secrets.SHED_ACCESS_TOKEN }}
-          path: ./shed
+          path: ./build/shed
       - name: "Compiling `shed`..."
         run: |
-          cd ./shed
+          cd ./build/shed
           dart pub get
           dart compile exe bin/shed.dart -o shed
-          cd ..
-          echo "./shed" >> $GITHUB_PATH
-      - run: |
-          VERBOSE=$([[ "$ACTIONS_RUNNER_DEBUG" == "true" ]] && echo "--verbose" || echo "")
-          shed version $VERBOSE
+          cd ../..
+          echo "./build/shed" >> $GITHUB_PATH
+      - name: "Generating next release version..."
+        run: |
+          shed version --update-pubspec
+          shed changelog --type=pretty
+          shed changelog --type=raw
+          git status
