@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: '0'
-      - name: "Downloading Dart v${{$DART_VERSION}}..."
+      - name: "Downloading Dart v${{env.DART_VERSION}}..."
         uses: dart-lang/setup-dart@v1.3
         with:
           sdk: $DART_VERSION
