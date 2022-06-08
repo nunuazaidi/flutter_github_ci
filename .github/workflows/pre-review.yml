@@ -6,6 +6,7 @@ on:
 env:
   FLUTTER_VERSION: '3.0.0'
   FLUTTER_CHANNEL: 'stable'
+
 jobs:
   pre-review-test:
     if: github.event.repository.fork == true
