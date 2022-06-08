@@ -12,21 +12,27 @@ jobs:
     if: github.event.repository.fork == false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: "Checking out ${{ github.repository}} repository..."
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
-      - uses: dart-lang/setup-dart@v1.3
+      - name: "Downloading Dart v$DART_VERSION..."
+        uses: dart-lang/setup-dart@v1.3
         with:
           sdk: $DART_VERSION
-      - uses: actions/checkout@v3
+      - name: "Downloading `shed`..."
+        uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
           token: ${{ secrets.SHED_ACCESS_TOKEN }}
           path: ./shed
-      - run: |
+      - name: "Compiling `shed`..."
+        run: |
           cd ./shed
           dart pub get
           dart compile exe bin/shed.dart -o shed
           cd ..
           echo "./shed" >> $GITHUB_PATH
-      - run: shed version --verbose
+      - run: |
+          VERBOSE=$([[ "$ACTIONS_RUNNER_DEBUG" == "true" ]] && echo "--verbose" || echo "")
+          shed version $VERBOSE

@@ -12,8 +12,10 @@ jobs:
     if: github.event.repository.fork == true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: subosito/flutter-action@v2
+      - name: "Checking out ${{ github.repository}} repository..."
+        uses: actions/checkout@v3
+      - name: "Downloading flutter v$FLUTTER_VERSION on channel $FLUTTER_CHANNEL..."
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: $FLUTTER_VERSION
           channel: $FLUTTER_CHANNEL
