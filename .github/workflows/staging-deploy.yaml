@@ -39,6 +39,9 @@ jobs:
           shed changelog --type=pretty --verbose
           shed changelog --type=raw --verbose
           shed version --update-pubspec --verbose
+          git config user.name "BuymoreBot"
+          git config user.email "github-bot@buymore.co.ke"
           git add .
           git commit -m "release: Build v$NEXT_VERSION for staging"
-          
+          git checkout staging
+          git merge -
