@@ -47,3 +47,4 @@ jobs:
           git tag -a v$NEXT_VERSION -m "v$NEXT_VERSION"
           git checkout base; git merge prepare-staging; git push origin base
           git checkout staging; git merge prepare-staging; git push origin staging
+          git push --follow-tags
