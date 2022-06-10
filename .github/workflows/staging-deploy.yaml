@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
-      - run: chmod +x ./.github/config.sh && ./.github/config.sh
+      - run: chmod +x ./md && ./md ./.github/config.sh
       - uses: dart-lang/setup-dart@v1.3
         with:
           sdk: ${{env.DART_VERSION}}
@@ -22,5 +22,5 @@ jobs:
           repository: nunuazaidi/shed
           token: ${{secrets.SHED_ACCESS_TOKEN}}
           path: ./shed
-      - run: chmod +x ./.github/compile.sh && ./.github/compile.sh
-      - run: shed version --verbose
+      - run: ./md ./.github/compile.sh
+      - run: ./md ./.github/staging_deploy.sh
