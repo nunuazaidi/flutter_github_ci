@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: chmod +x ./.github/config.sh && ./.github/config.sh
+      - run: chmod +x ./md
+      - run: ./md ./.github/config.sh
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{env.FLUTTER_VERSION}}

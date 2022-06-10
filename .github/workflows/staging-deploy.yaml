@@ -1,38 +1,26 @@
 name: staging-deploy
+
 on:
   push:
     branches:
-      - 'prepare-staging'
-
-env:
-  DART_VERSION: '2.17.0'
+      - 'staging-prepare'
 
 jobs:
   staging-deploy:
     if: github.event.repository.fork == false
     runs-on: ubuntu-latest
     steps:
-      - name: "Checking out ${{ github.repository }} repository..."
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
-      - name: "Downloading Dart v${{env.DART_VERSION}}..."
-        uses: dart-lang/setup-dart@v1.3
+      - run: chmod +x ./.github/config.sh && ./.github/config.sh
+      - uses: dart-lang/setup-dart@v1.3
         with:
-          sdk: $DART_VERSION
-      - name: "Downloading `shed`..."
-        uses: actions/checkout@v3
+          sdk: ${{env.DART_VERSION}}
+      - uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
-          token: ${{ secrets.SHED_ACCESS_TOKEN }}
+          token: ${{secrets.SHED_ACCESS_TOKEN}}
           path: ./shed
-      - name: "Compiling `shed`..."
-        run: |
-          cd ./shed
-          dart pub get
-          dart compile exe bin/shed.dart -o shed
-          cd ..
-          echo "./shed" >> $GITHUB_PATH
-      - run: |
-          VERBOSE=$([[ "$ACTIONS_RUNNER_DEBUG" == "true" ]] && echo "--verbose" || echo "")
-          shed version $VERBOSE
+      - run: chmod +x ./.github/compile.sh && ./.github/compile.sh
+      - run: shed version --verbose
