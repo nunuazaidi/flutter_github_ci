@@ -37,7 +37,8 @@ jobs:
           repository: nunuazaidi/shed
           ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
           path: ./shed
-      - name: "Compiling shed tool..."
+      - name: "Compiling shed..."
         run: ./md ./.github/compile.sh
       - run: flutter pub get
-      - run: shed test --abort-on-fail
+      - name: "Running `flutter test` and aborting when a test fails..."
+        run: shed test --abort-on-fail

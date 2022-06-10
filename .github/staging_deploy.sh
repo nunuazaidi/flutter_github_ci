@@ -8,11 +8,16 @@ shed changelog --type=pretty --verbose
 shed changelog --type=raw --verbose
 shed version --update-pubspec --verbose
 
+# Configure SSH to access the repository with a private key, stored in the secrets.
+# The key has write permissions enabled.
+eval $(ssh-agent)
+ssh-add - <<< "${{secrets.FLUTTER_GITHUB_CI_DEPLOY_KEY}}"
+
 # Configure Git to use the `github-actions` bot.
 # Subsequent commits will appear with the `github-actions[bot]` username on GitHub instead of `Unknown`
 git config user.name "github-actions[bot]"
 git config user.email "github-actions[bot]@users.noreply.github.com"
-git remote set-url origin https://${{secrets.FLUTTER_GITHUB_CI_ACCESS_TOKEN}}@github.com/nunuazaidi/flutter_github_ci.git
+git remote set-url origin git@github.com:nunuazaidi/flutter_github_ci.git
 
 # Stage all the changes, commit and tag them, using with the next release version as the tag value.
 # Without the `[skip ci]` at the end of the commit message, the `post_review.yaml` workflow will be triggered as soon as
