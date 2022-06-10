@@ -31,11 +31,11 @@ jobs:
         with:
           flutter-version: ${{env.FLUTTER_VERSION}}
           channel: ${{env.FLUTTER_CHANNEL}}
-      - name: "Downloading shed tool..."
+      - name: "Downloading shed..."
         uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
-          token: ${{secrets.SHED_ACCESS_TOKEN}}
+          ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
           path: ./shed
       - name: "Compiling shed tool..."
         run: ./md ./.github/compile.sh
