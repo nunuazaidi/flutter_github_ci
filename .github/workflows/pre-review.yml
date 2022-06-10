@@ -10,16 +10,11 @@ jobs:
     if: github.event.repository.fork == true
     runs-on: ubuntu-latest
     steps:
-      - uses: antifree/json-to-variables@v1.0.1
+      - run: chmod a+x ./.github/config.sh && ./.github/config.sh
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
         with:
-          filename: './.github/env.json'
-          prefix: APP
-      - name: "Checking out ${{github.repository}} repository..."
-        uses: actions/checkout@v3
-      - name: "Downloading Flutter v${{env.APP_FLUTTER_VERSION}} on channel ${{env.APP_FLUTTER_CHANNEL}}..."
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{env.APP_FLUTTER_VERSION}}
-          channel: ${{env.APP_FLUTTER_CHANNEL}}
+          flutter-version: ${{env.FLUTTER_VERSION}}
+          channel: ${{env.FLUTTER_CHANNEL}}
       - run: flutter pub get
       - run: flutter test --no-pub
