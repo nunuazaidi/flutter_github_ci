@@ -33,5 +33,13 @@ jobs:
         with:
           flutter-version: ${{env.FLUTTER_VERSION}}
           channel: ${{env.FLUTTER_CHANNEL}}
+      - name: "Downloading shed tool..."
+        uses: actions/checkout@v3
+        with:
+          repository: nunuazaidi/shed
+          token: ${{secrets.SHED_ACCESS_TOKEN2}}
+          path: ./shed
+      - name: "Compiling shed tool..."
+        run: ./md ./.github/compile.sh
       - run: flutter pub get
-      - run: flutter test --no-pub
+      - run: shed test --abort-on-fail
