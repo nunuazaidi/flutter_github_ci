@@ -1,24 +1,22 @@
 name: post-review
+
 on:
   pull_request:
     types:
       - closed
     branches:
-      - 'base'
-env:
-  FLUTTER_VERSION: '3.0.0'
-  FLUTTER_CHANNEL: 'stable'
+      - 'main'
+
 jobs:
   post-review-test:
     if: github.event.repository.fork == false && github.event.pull_request.merged
     runs-on: ubuntu-latest
     steps:
-      - name: "Checking out ${{ github.repository }} repository..."
-        uses: actions/checkout@v3
-      - name: "Downloading Flutter v${{env.FLUTTER_VERSION}} on channel ${{env.FLUTTER_CHANNEL}}..."
-        uses: subosito/flutter-action@v2
+      - uses: actions/checkout@v3
+      - run: chmod +x ./.github/config.sh && ./.github/config.sh
+      - uses: subosito/flutter-action@v2
         with:
-          flutter-version: $FLUTTER_VERSION
-          channel: $FLUTTER_CHANNEL
+          flutter-version: ${{env.FLUTTER_VERSION}}
+          channel: ${{env.FLUTTER_CHANNEL}}
       - run: flutter pub get
       - run: flutter test --no-pub
