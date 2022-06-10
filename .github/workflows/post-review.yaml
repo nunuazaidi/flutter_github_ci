@@ -13,9 +13,7 @@
 name: post-review
 
 on:
-  pull_request:
-    types:
-      - closed
+  push:
     branches:
       - 'main'
 
@@ -38,6 +36,7 @@ jobs:
         with:
           repository: nunuazaidi/shed
           ref: 'main'
+          ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
           path: ./shed
       - name: "Compiling shed..."
         run: ./md ./.github/compile.sh
