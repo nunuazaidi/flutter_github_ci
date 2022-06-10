@@ -33,5 +33,5 @@ git checkout staging-deploy
 git merge staging-prepare
 git push origin staging-deploy
 
-# Push the new tag so that it can be made available in the repository.
+# Push the new tag so that it can be made available in the repo.
 git push --follow-tags
