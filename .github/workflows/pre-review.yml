@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: antifree/json-to-variables@v1.0.1
         with:
-          filename: './github/env.json'
+          filename: './.github/env.json'
           prefix: APP
       - name: "Checking out ${{github.repository}} repository..."
         uses: actions/checkout@v3
