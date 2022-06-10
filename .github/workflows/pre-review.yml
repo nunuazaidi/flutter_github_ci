@@ -10,6 +10,7 @@ jobs:
     if: github.event.repository.fork == true
     runs-on: ubuntu-latest
     steps:
+      - run: ls -la
       - run: chmod a+x ./.github/config.sh && ./.github/config.sh
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
