@@ -1,3 +1,28 @@
+# The staging-deploy workflow.
+#
+# This workflow is used to prepare all changes currently on the 'main' branch and then deploys them to the 'staging'
+# environment.
+#
+# A pull request to the 'staging-prepare' branch (usually from 'main') will trigger the preparation → release process,
+# all happening on the 'staging-prepare' branch as follows:
+#
+#   1) Based on the new commits and the previous version, the next version (such as `1.8.9`) is generated.
+#   2) A 'pretty' changelog is generated and prepended to the top of the `CHANGELOG.md` file, suitable for the repo.
+#   3) The contents of 'changelog.txt' are copied and prepended to the top of the `past_changelogs.txt` file, as a way
+#      to back them up.
+#   4) A 'raw' changelog is then generated and written to the `changelog.txt` file, overwriting everything in it. This
+#      file is suitable as release notes for app distribution platforms (such as Firebase App Distribution).
+#   5) The `version: ` line located in the `pubspec.yaml` file is updated with the next release version label.
+#   6) A commit involving all the changes performed in steps 2 - 5 is created.
+#   7) The commit created in step 7 is tagged, with the next release used as the tag.
+#   8) The commit is then merged into the 'main' branch and the changes are pushed, skipping the CI trigger.
+#   9) The commit is also merged into the 'staging-deploy' branch and the changes are pushed. This push triggers the CD
+#      engine to pick up the changes and deploy them to the staging environment.
+#  10) The created tag is also pushed.
+#
+# Steps 2 - 5 are created via the `shed` tool.
+#
+# For more info, see the `nunuazaidi/shed` repository.
 name: staging-deploy
 
 on:
@@ -10,17 +35,23 @@ jobs:
     if: github.event.repository.fork == false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: "Checkout ${{github.repository}} with all commits..."
+        uses: actions/checkout@v3
         with:
           fetch-depth: '0'
-      - run: chmod +x ./md && ./md ./.github/config.sh
-      - uses: dart-lang/setup-dart@v1.3
+      - name: "Load environment variables..."
+        run: chmod +x ./md && ./md ./.github/config.sh
+      - name: "Download Dart v${{env.DART_VERSION}}..."
+        uses: dart-lang/setup-dart@v1.3
         with:
           sdk: ${{env.DART_VERSION}}
-      - uses: actions/checkout@v3
+      - name: "Downloading shed tool..."
+        uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
           token: ${{secrets.SHED_ACCESS_TOKEN}}
           path: ./shed
-      - run: ./md ./.github/compile.sh
-      - run: ./md ./.github/staging_deploy.sh
+      - name: "Compiling shed tool..."
+        run: ./md ./.github/compile.sh
+      - name: "Preparing deployment to staging environment..."
+        run: ./md ./.github/staging_deploy.sh

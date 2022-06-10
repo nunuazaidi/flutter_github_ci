@@ -1,0 +1,45 @@
+# Post-review workflow.
+#
+# This workflow is used to ensure that the newly accepted changes into the 'main' branch are stable and do not break
+# the code already present on the 'main' branch.
+#
+# The workflow is only triggered on the original repository (and not on the fork repositories) after a pull request from
+# another branch (such as 'main' from a fork repository) is accepted and the pull request closed.
+#
+# The workflow runs the `shed test --abort-on-fail` command, which in turn runs the `flutter test` command and will
+# abort the test process as soon as one test fails. The failure will also cause a reversal of the pull request.
+#
+# For more info, see the `nunuazaidi/shed` repository.
+name: post-review
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'main'
+
+jobs:
+  post-review-test:
+    if: github.event.repository.fork == false && github.event.pull_request.merged
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout ${{github.repository}}..."
+        uses: actions/checkout@v3
+      - name: "Load environment variables..."
+        run: chmod +x ./md && ./md ./.github/config.sh
+      - name: "Download Flutter v${{env.FLUTTER_VERSION}} on channel ${{env.FLUTTER_CHANNEL}}..."
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{env.FLUTTER_VERSION}}
+          channel: ${{env.FLUTTER_CHANNEL}}
+      - name: "Downloading shed tool..."
+        uses: actions/checkout@v3
+        with:
+          repository: nunuazaidi/shed
+          token: ${{secrets.SHED_ACCESS_TOKEN}}
+          path: ./shed
+      - name: "Compiling shed tool..."
+        run: ./md ./.github/compile.sh
+      - run: flutter pub get
+      - run: shed test --abort-on-fail

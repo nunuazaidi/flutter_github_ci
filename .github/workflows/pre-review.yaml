@@ -1,0 +1,43 @@
+# Pre-review workflow.
+#
+# This workflow is used to ensure the changes made are stable before they're submitted for review to the original
+# repository.
+#
+# The workflow is triggered only on a fork repository, whenever a push is made to the 'main' branch.
+# A merge request from another branch (such as a 'feature' branch) to 'main' will also trigger this workflow.
+#
+# The workflow runs the `shed test --abort-on-fail` command, which in turn runs the `flutter test` command and will
+# abort the test process as soon as one test fails.
+#
+# For more info, see the `nunuazaidi/shed` repository.
+name: pre-review
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  pre-review-test:
+    if: github.event.repository.fork == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout ${{github.repository}}..."
+        uses: actions/checkout@v3
+      - name: "Load environment variables..."
+        run: chmod +x ./md && ./md ./.github/config.sh
+      - name: "Download Flutter v${{env.FLUTTER_VERSION}} on channel ${{env.FLUTTER_CHANNEL}}..."
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{env.FLUTTER_VERSION}}
+          channel: ${{env.FLUTTER_CHANNEL}}
+      - name: "Downloading shed tool..."
+        uses: actions/checkout@v3
+        with:
+          repository: nunuazaidi/shed
+          token: ${{secrets.SHED_ACCESS_TOKEN}}
+          path: ./shed
+      - name: "Compiling shed tool..."
+        run: ./md ./.github/compile.sh
+      - run: flutter pub get
+      - run: shed test --abort-on-fail
