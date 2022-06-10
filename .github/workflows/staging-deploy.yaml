@@ -1,50 +1,26 @@
 name: staging-deploy
+
 on:
   push:
     branches:
-      - 'prepare-staging'
-
-env:
-  DART_VERSION: '2.17.0'
+      - 'staging-prepare'
 
 jobs:
   staging-deploy:
     if: github.event.repository.fork == false
     runs-on: ubuntu-latest
     steps:
-      - name: "Checking out ${{ github.repository }} repository..."
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
-      - name: "Downloading Dart v${{env.DART_VERSION}}..."
-        uses: dart-lang/setup-dart@v1.3
+      - run: chmod +x ./md && ./md ./.github/config.sh
+      - uses: dart-lang/setup-dart@v1.3
         with:
-          sdk: $DART_VERSION
-      - name: "Downloading `shed`..."
-        uses: actions/checkout@v3
+          sdk: ${{env.DART_VERSION}}
+      - uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
-          token: ${{ secrets.SHED_ACCESS_TOKEN }}
-          path: ./build/shed
-      - name: "Compiling `shed`..."
-        run: |
-          cd ./build/shed
-          dart pub get
-          dart compile exe bin/shed.dart -o shed
-          cd ../..
-          echo "./build/shed" >> $GITHUB_PATH
-      - name: "Generating next release version..."
-        run: |
-          NEXT_VERSION=$(shed version)
-          shed changelog --type=pretty --verbose
-          shed changelog --type=raw --verbose
-          shed version --update-pubspec --verbose
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://${{secrets.FLUTTER_GITHUB_CI_ACCESS_TOKEN}}@github.com/nunuazaidi/flutter_github_ci.git
-          git add .
-          git commit -m "release: Build v$NEXT_VERSION for staging [skip ci]"
-          git tag -a v$NEXT_VERSION -m "v$NEXT_VERSION"
-          git checkout base; git merge prepare-staging; git push origin base
-          git checkout staging; git merge prepare-staging; git push origin staging
-          git push --follow-tags
+          token: ${{secrets.SHED_ACCESS_TOKEN}}
+          path: ./shed
+      - run: ./md ./.github/compile.sh
+      - run: ./md ./.github/staging_deploy.sh
