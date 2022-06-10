@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
-          token: ${{secrets.SHED_ACCESS_TOKEN}}
+          token: "123456789-test-token"
           path: ./shed
       - name: "Compiling shed tool..."
         run: ./md ./.github/compile.sh
