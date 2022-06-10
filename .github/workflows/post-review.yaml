@@ -33,11 +33,13 @@ jobs:
         with:
           flutter-version: ${{env.FLUTTER_VERSION}}
           channel: ${{env.FLUTTER_CHANNEL}}
+      - name: "Checking token..."
+        run: echo ${{secrets.SHED_ACCESS_TOKEN}}
       - name: "Downloading shed tool..."
         uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
-          token: ${{secrets.SHED_ACCESS_TOKEN2}}
+          token: ${{secrets.SHED_ACCESS_TOKEN}}
           path: ./shed
       - name: "Compiling shed tool..."
         run: ./md ./.github/compile.sh
