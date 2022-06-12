@@ -38,12 +38,13 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ./build/shed
-          key: shed-${{runner.os}}
+          key: shed-${{env.SHED_VERSION}}-${{runner.os}}-${{hashFiles('./build/shed/pubspec.yaml')}}
       - name: "Downloading shed..."
         if: steps.cache-shed.outputs.cache-hit == false
         uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
+          ref: ${{env.SHED_VERSION}}
           ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
           path: ./build/shed
       - name: "Compiling shed..."
