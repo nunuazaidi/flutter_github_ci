@@ -61,7 +61,6 @@ jobs:
           shed version --update-pubspec
           eval "$(ssh-agent -s)"
           ssh-add - <<< "${{secrets.FLUTTER_GITHUB_CI_DEPLOY_KEY}}"
-          ssh -T git@github.com
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin git@github.com:nunuazaidi/flutter_github_ci.git
