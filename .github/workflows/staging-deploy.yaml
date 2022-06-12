@@ -54,4 +54,24 @@ jobs:
       - name: "Compiling shed tool..."
         run: ./md ./.github/compile.sh
       - name: "Preparing deployment to staging environment..."
-        run: ./md ./.github/staging_deploy.sh ${{secrets.FLUTTER_GITHUB_CI_DEPLOY_KEY}}
+        run: |
+          NEXT_VERSION=$(shed version)
+          shed changelog --type=pretty --verbose
+          shed changelog --type=raw --verbose
+          shed version --update-pubspec --verbose
+          eval "$(ssh-agent -s)"
+          ssh-add - <<< "${{secrets.FLUTTER_GITHUB_CI_DEPLOY_KEY}}"
+          ssh -vT git@github.com
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin git@github.com:nunuazaidi/flutter_github_ci.git
+          git add .
+          git commit -m "release: Build v$NEXT_VERSION to staging environment [skip ci]"
+          git tag -a v$NEXT_VERSION -m "v$NEXT_VERSION"
+          git checkout main
+          git merge staging-prepare
+          git push origin main
+          git checkout staging-deploy
+          git merge staging-prepare
+          git push origin staging-deploy
+          git push --follow-tags
