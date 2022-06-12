@@ -16,8 +16,7 @@ on:
   push:
     branches:
       - 'main'
-    branches-ignore:
-      - 'nunuazaidi/**'
+      - '!nunuazaidi/**'
 
 jobs:
   pre-review:
