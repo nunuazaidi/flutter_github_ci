@@ -18,45 +18,14 @@ on:
       - 'main'
 
 jobs:
-  pre-review:
+  pre-review-setup-flutter:
     if: github.event.repository.fork == true
+    uses: ./.github/workflows/setup-flutter.yaml
+  pre-review-setup-shed:
+    uses: ./.github/workflows/setup-shed.yaml
+  pre-review-test:
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout ${{github.repository}}..."
-        uses: actions/checkout@v3
-      - name: "Load environment variables..."
-        run: chmod +x ./md && ./md ./.github/config.sh
-      - name: "Download Flutter v${{env.FLUTTER_VERSION}} on channel ${{env.FLUTTER_CHANNEL}}..."
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{env.FLUTTER_VERSION}}
-          cache: true
-          cache-key: ${{env.FLUTTER_VERSION}}
-          channel: ${{env.FLUTTER_CHANNEL}}
-      - name: "Restore shed source from cache..."
-        id: cache-shed-src
-        uses: actions/cache@v3
-        with:
-          path: ./build/shed/src
-          key: shed-${{env.SHED_VERSION}}-${{runner.os}}-${{hashFiles('./build/shed/src/pubspec.yaml')}}
-      - name: "Downloading shed..."
-        if: steps.cache-shed-src.outputs.cache-hit == false
-        uses: actions/checkout@v3
-        with:
-          repository: nunuazaidi/shed
-          ref: ${{env.SHED_VERSION}}
-          ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
-          path: ./build/shed/src
-      - name: "Restoring compiled shed binary from cache..."
-        id: cache-shed-tool
-        uses: actions/cache@v3
-        with:
-          path: ./build/shed/out
-          key: ${{env.SHED_VERSION}}-tool
-      - name: "Compiling shed..."
-        run: ./md ./.github/compile.sh
-      - name: "Adding shed to $GITHUB_PATH..."
-        run: echo "./build/shed/out" >> $GITHUB_PATH
       - run: flutter pub get
       - name: "Running `flutter test` and aborting when a test fails..."
         run: shed test --abort-on-fail

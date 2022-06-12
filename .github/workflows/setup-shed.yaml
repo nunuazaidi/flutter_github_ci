@@ -1,0 +1,34 @@
+name: setup-shed
+
+on:
+  workflow_call:
+
+jobs:
+  setup-shed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Restore shed source from cache..."
+        id: cache-shed-src
+        uses: actions/cache@v3
+        with:
+          path: ./build/shed/src
+          key: shed-${{env.SHED_VERSION}}-${{runner.os}}-${{hashFiles('./build/shed/src/pubspec.yaml')}}
+      - name: "Downloading shed..."
+        if: steps.cache-shed-src.outputs.cache-hit == false
+        uses: actions/checkout@v3
+        with:
+          repository: nunuazaidi/shed
+          ref: ${{env.SHED_VERSION}}
+          ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
+          path: ./build/shed/src
+      - name: "Restoring compiled shed binary from cache..."
+        id: cache-shed-tool
+        uses: actions/cache@v3
+        with:
+          path: ./build/shed/out
+          key: ${{env.SHED_VERSION}}-tool
+      - name: "Compiling shed..."
+        if: steps.cache-shed-tool.outputs.cache-hit == false
+        run: ./md ./.github/compile.sh
+      - name: "Adding shed to $GITHUB_PATH..."
+        run: echo "./build/shed/out" >> $GITHUB_PATH
