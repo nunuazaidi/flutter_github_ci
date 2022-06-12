@@ -40,7 +40,6 @@ jobs:
           path: ./build/shed
           key: shed-${{runner.os}}
       - name: "Downloading shed..."
-        id: download-shed
         if: steps.cache-shed.outputs.cache-hit == false
         uses: actions/checkout@v3
         with:
@@ -48,7 +47,6 @@ jobs:
           ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
           path: ./build/shed
       - name: "Compiling shed..."
-        if: steps.download-shed.outcome == false
         run: ./md ./.github/compile.sh
       - run: flutter pub get
       - name: "Running `flutter test` and aborting when a test fails..."
