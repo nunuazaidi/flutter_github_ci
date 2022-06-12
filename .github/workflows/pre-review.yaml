@@ -33,13 +33,14 @@ jobs:
           cache: true
           cache-key: ${{env.FLUTTER_VERSION}}
           channel: ${{env.FLUTTER_CHANNEL}}
-      - name: "Cache shed..."
+      - name: "Restore shed from cache..."
         id: cache-shed
         uses: actions/cache@v3
         with:
           path: ./build/shed
           key: shed-${{runner.os}}
       - name: "Downloading shed..."
+        id: download-shed
         if: steps.cache-shed.outputs.cache-hit == false
         uses: actions/checkout@v3
         with:
@@ -47,6 +48,7 @@ jobs:
           ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
           path: ./build/shed
       - name: "Compiling shed..."
+        if: steps.download-shed.outcome == false
         run: ./md ./.github/compile.sh
       - run: flutter pub get
       - name: "Running `flutter test` and aborting when a test fails..."
