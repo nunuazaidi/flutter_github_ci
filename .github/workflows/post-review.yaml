@@ -15,7 +15,7 @@ name: post-review
 on:
   push:
     branches:
-      - 'nunuazaidi/main'
+      - 'main'
 
 jobs:
   post-review:
@@ -35,7 +35,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: nunuazaidi/shed
-          ref: 'main'
           ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
           path: ./shed
       - name: "Compiling shed..."
