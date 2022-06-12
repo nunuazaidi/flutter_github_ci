@@ -2,7 +2,7 @@ name: flutter_github_ci
 description: CI / CD pipeline configuration for Flutter via GitHub Actions.
 publish_to: 'none'
 
-version: 0.1.1
+version: 0.1.2
 
 environment:
   sdk: ">=2.16.2 <3.0.0"
