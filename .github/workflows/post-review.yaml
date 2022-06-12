@@ -36,7 +36,7 @@ jobs:
         with:
           repository: nunuazaidi/shed
           ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
-          path: ./shed
+          path: ./build/shed
       - name: "Compiling shed..."
         run: ./md ./.github/compile.sh
       - run: flutter pub get
