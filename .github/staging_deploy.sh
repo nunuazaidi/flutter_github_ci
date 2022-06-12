@@ -12,7 +12,6 @@ shed version --update-pubspec --verbose
 # The key has write permissions enabled.
 eval "$(ssh-agent -s)"
 ssh-add - <<< "$1"
-ssh -vT git@github.com
 
 # Configure Git to use the `github-actions` bot.
 # Subsequent commits will appear with the `github-actions[bot]` username on GitHub instead of `Unknown`
