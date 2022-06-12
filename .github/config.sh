@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
-# Environment variables used by all other steps, loaded in with the help of the 'md' tool (located in the root directory
-# of the project).
+# Sets up environment variables to be made available by all subsequent steps.
+#
+# Modifying these values will directly affect all steps in all workflows.
+#
+# Any sensitive information (such as secrets) should not be put in this file.
 FLUTTER_VERSION=3.0.0
 FLUTTER_CHANNEL=stable
 DART_VERSION=2.17.0
