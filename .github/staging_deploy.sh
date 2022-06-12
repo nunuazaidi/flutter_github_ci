@@ -10,8 +10,9 @@ shed version --update-pubspec --verbose
 
 # Configure SSH to access the repository with a private key, stored in the secrets.
 # The key has write permissions enabled.
-eval $(ssh-agent)
-ssh-add - <<< "${{secrets.FLUTTER_GITHUB_CI_DEPLOY_KEY}}"
+eval "$(ssh-agent -s)"
+ssh-add - <<< "$1"
+ssh -vT git@github.com
 
 # Configure Git to use the `github-actions` bot.
 # Subsequent commits will appear with the `github-actions[bot]` username on GitHub instead of `Unknown`
