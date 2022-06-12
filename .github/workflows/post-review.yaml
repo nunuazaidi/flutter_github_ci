@@ -15,7 +15,7 @@ name: post-review
 on:
   push:
     branches:
-      - 'main'
+      - 'nunuazaidi/main'
 
 jobs:
   post-review:
@@ -27,7 +27,7 @@ jobs:
       - name: "Load environment variables..."
         run: chmod +x ./md && ./md ./.github/config.sh
       - name: "Download Flutter v${{env.FLUTTER_VERSION}} on channel ${{env.FLUTTER_CHANNEL}}..."
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v002
         with:
           flutter-version: ${{env.FLUTTER_VERSION}}
           channel: ${{env.FLUTTER_CHANNEL}}
