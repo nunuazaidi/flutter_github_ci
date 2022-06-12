@@ -4,9 +4,9 @@
 NEXT_VERSION=$(shed version)
 
 # Generate both `pretty` and `raw` changelogs, writing them to their respective files.
-shed changelog --type=pretty --verbose
-shed changelog --type=raw --verbose
-shed version --update-pubspec --verbose
+shed changelog --type=pretty
+shed changelog --type=raw
+shed version --update-pubspec
 
 # Configure Git to use the `github-actions` bot.
 # Subsequent commits will appear with the `github-actions[bot]` username on GitHub instead of `Unknown`
