@@ -18,7 +18,7 @@ on:
       - 'main'
 
 jobs:
-  pre-review-test:
+  pre-review:
     if: github.event.repository.fork == true
     runs-on: ubuntu-latest
     steps:
