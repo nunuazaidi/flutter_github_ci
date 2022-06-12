@@ -50,7 +50,7 @@ jobs:
         with:
           repository: nunuazaidi/shed
           ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
-          path: ./shed
+          path: ./build/shed
       - name: "Compiling shed tool..."
         run: ./md ./.github/compile.sh
       - name: "Preparing deployment to staging environment..."
