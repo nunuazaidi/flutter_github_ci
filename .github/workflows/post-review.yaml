@@ -18,8 +18,8 @@ on:
       - 'main'
 
 jobs:
-  post-review-test:
-    if: github.event.repository.fork == false && github.event.pull_request.merged
+  post-review:
+    if: github.event.repository.fork == false
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout ${{github.repository}}..."
