@@ -54,4 +54,4 @@ jobs:
       - name: "Compiling shed tool..."
         run: ./md ./.github/compile.sh
       - name: "Preparing deployment to staging environment..."
-        run: ./md ./.github/staging_deploy.sh
+        run: ./md ./.github/staging_deploy.sh ${{secrets.FLUTTER_GITHUB_CI_DEPLOY_KEY}}
