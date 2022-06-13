@@ -26,6 +26,8 @@ jobs:
       - uses: ./.github/actions/setup-env
       - uses: ./.github/actions/setup-flutter
       - uses: ./.github/actions/setup-shed
+        with:
+          shed-deploy-key: ${{secrets.SHED_DEPLOY_KEY}}
       - run: flutter pub get
       - name: "Running `flutter test` and aborting when a test fails..."
         run: shed test --abort-on-fail

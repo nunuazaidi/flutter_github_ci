@@ -2,6 +2,11 @@ name: setup-shed
 
 description: "Set up shed"
 
+inputs:
+  shed-deploy-key:
+    description: "Shed deployment key"
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -15,7 +20,7 @@ runs:
       with:
         repository: nunuazaidi/shed
         ref: ${{env.SHED_VERSION}}
-        ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
+        ssh-key: ${{inputs.shed-deploy-key}}
         path: ./build/shed/src
     - uses: actions/cache@v3
       id: cache-shed-tool
