@@ -5,5 +5,5 @@ description: "Sets up the environment"
 runs:
   using: "composite"
   steps:
-    - name: "Load environment variables..."
-      run: chmod +x ./md && ./md ./.github/config.sh
+    - run: chmod +x ./md && ./md ./.github/config.sh
+      shell: bash
