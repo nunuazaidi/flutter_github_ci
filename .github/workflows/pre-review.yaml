@@ -22,12 +22,19 @@ jobs:
     if: github.event.repository.fork == true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/setup-env
+      - name: "Checking out ${{github.repository}} repository..."
+        uses: actions/checkout@v3
+
+      - name: "Setting up the environment..."
+        uses: ./.github/actions/setup-env
+
+      - name: "Setting up Flutter..."
       - uses: ./.github/actions/setup-flutter
-      - uses: ./.github/actions/setup-shed
+
+      - name: "Setting up shed..."
+        uses: ./.github/actions/setup-shed
         with:
           shed-deploy-key: ${{secrets.SHED_DEPLOY_KEY}}
-      - run: flutter pub get
+
       - name: "Running `flutter test` and aborting when a test fails..."
         run: shed test --abort-on-fail

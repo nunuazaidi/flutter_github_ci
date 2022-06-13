@@ -1,3 +1,9 @@
+# Composite action to set up Flutter and make it available for subsequent steps.
+#
+# If an existing version of Flutter was already cached, it's restored, otherwise a fresh download of Flutter takes place
+# and then cached.
+#
+# The Flutter version is used as the cache key, loaded in from the environment variables.
 name: setup-flutter
 
 description: "Set up Flutter"

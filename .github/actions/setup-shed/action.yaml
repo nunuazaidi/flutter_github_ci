@@ -1,3 +1,17 @@
+# Composite action to setup the `shed` tool.
+#
+# The action checks to see if the source code is already cached under `./build/shed/src` and checks that out instead,
+# if not, the source code is downloaded from the `nunuazaidi/shed` repository (along with a passed in `shed-deploy-key`
+# argument) and cached.
+#
+# The action then checks to see if the `shed` binary is already cached under `./build/shed/out` restores that instead,
+# if not, the binary is generated in `./build/shed/out` and cached.
+#
+# For both the source `./build/shed/src` and binary output `./build/shed/out` caches, the latest commit hash for the
+# `shed` repository is used as the key for each of the caches.
+#
+# The action takes the compiled binary and adds it to the `$GITHUB_PATH` environment variable so that it can be made
+# available to any subsequent steps.
 name: setup-shed
 
 description: "Set up shed"
@@ -15,6 +29,7 @@ runs:
       with:
         path: ./build/shed/src
         key: shed-${{env.SHED_VERSION}}-${{runner.os}}-${{hashFiles('./build/shed/src/pubspec.yaml')}}
+
     - uses: actions/checkout@v3
       if: steps.cache-shed-src.outputs.cache-hit == false
       with:
@@ -22,12 +37,15 @@ runs:
         ref: ${{env.SHED_VERSION}}
         ssh-key: ${{inputs.shed-deploy-key}}
         path: ./build/shed/src
+
     - uses: actions/cache@v3
       id: cache-shed-tool
       with:
         path: ./build/shed/out
         key: ${{env.SHED_VERSION}}-tool
+
     - run: ./md ./.github/compile.sh
       shell: bash
+
     - run: echo "./build/shed/out" >> $GITHUB_PATH
       shell: bash
