@@ -22,23 +22,19 @@ jobs:
     if: github.event.repository.fork == false
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout ${{github.repository}}..."
+      - name: "Checking out ${{github.repository}} repository..."
         uses: actions/checkout@v3
-      - name: "Load environment variables..."
-        run: chmod +x ./md && ./md ./.github/config.sh
-      - name: "Download Flutter v${{env.FLUTTER_VERSION}} on channel ${{env.FLUTTER_CHANNEL}}..."
-        uses: subosito/flutter-action@v2
+
+      - name: "Setting up the environment..."
+        uses: ./.github/actions/setup-env
+
+      - name: "Setting up Flutter..."
+        uses: ./.github/actions/setup-flutter
+
+      - name: "Setting up shed..."
+        uses: ./.github/actions/setup-shed
         with:
-          flutter-version: ${{env.FLUTTER_VERSION}}
-          channel: ${{env.FLUTTER_CHANNEL}}
-      - name: "Downloading shed..."
-        uses: actions/checkout@v3
-        with:
-          repository: nunuazaidi/shed
-          ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
-          path: ./build/shed
-      - name: "Compiling shed..."
-        run: ./md ./.github/compile.sh
-      - run: flutter pub get
+          shed-deploy-key: ${{secrets.SHED_DEPLOY_KEY}}
+
       - name: "Running `flutter test` and aborting when a test fails..."
         run: shed test --abort-on-fail

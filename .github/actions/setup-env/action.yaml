@@ -1,0 +1,15 @@
+# Composite action to load the environment variables.
+#
+# The environment variables are loaded via the `./.github/config.sh` script which is in turn loaded by the `md` tool,
+# located in the root of the project.
+#
+# The `md` tool takes in a path to a script as its argument, then makes that script executable and runs it in one step.
+name: setup-env
+
+description: "Set up environment variables"
+
+runs:
+  using: "composite"
+  steps:
+    - run: chmod +x ./md && ./md ./.github/config.sh
+      shell: bash

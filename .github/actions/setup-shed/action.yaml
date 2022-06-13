@@ -1,0 +1,40 @@
+# Composite action to setup the `shed` tool.
+#
+# The action checks to see if the binary output path `./build/shed/out` is already cached, and if not, it downloads the
+# source code from `nunuazaidi/shed` (along with a passed in `shed-deploy-key` argument), compiles the binary (with the
+# name `shed`), places it in the `./build/shed/out` directory, and caches the directory.
+#
+# The action takes the compiled binary and adds it to the `$GITHUB_PATH` environment variable so that it can be made
+# available to any subsequent steps.
+name: setup-shed
+
+description: "Set up shed"
+
+inputs:
+  shed-deploy-key:
+    description: "Shed deployment key"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/cache@v3
+      id: cache-shed
+      with:
+        path: ./build/shed/out
+        key: shed-${{env.SHED_VERSION}}-${{runner.os}}
+
+    - uses: actions/checkout@v3
+      if: steps.cache-shed.outputs.cache-hit != 'true'
+      with:
+        repository: nunuazaidi/shed
+        ref: ${{env.SHED_VERSION}}
+        ssh-key: ${{inputs.shed-deploy-key}}
+        path: ./build/shed/src
+
+    - run: ./md ./.github/compile.sh
+      if: steps.cache-shed.outputs.cache-hit != 'true'
+      shell: bash
+
+    - run: echo "./build/shed/out" >> $GITHUB_PATH
+      shell: bash
