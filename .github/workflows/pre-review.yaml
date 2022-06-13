@@ -24,13 +24,17 @@ jobs:
     steps:
       - name: "Checking out ${{github.repository}} repository..."
         uses: actions/checkout@v3
+
       - name: "Setting up the environment..."
         uses: ./.github/actions/setup-env
+
       - name: "Setting up Flutter..."
-      - uses: ./.github/actions/setup-flutter
+        uses: ./.github/actions/setup-flutter
+
       - name: "Setting up shed..."
         uses: ./.github/actions/setup-shed
         with:
           shed-deploy-key: ${{secrets.SHED_DEPLOY_KEY}}
+
       - name: "Running `flutter test` and aborting when a test fails..."
         run: shed test --abort-on-fail
