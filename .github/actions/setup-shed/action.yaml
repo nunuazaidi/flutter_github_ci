@@ -20,6 +20,9 @@ inputs:
   shed-deploy-key:
     description: "Shed deployment key"
     required: true
+  invalidate-cache:
+    description: "Invalidate the cache or not"
+    required: false
 
 runs:
   using: "composite"
@@ -31,7 +34,7 @@ runs:
         key: shed-${{env.SHED_VERSION}}-${{runner.os}}
 
     - uses: actions/checkout@v3
-      if: steps.cache-shed-src.outputs.cache-hit == false
+      if: steps.cache-shed-src.outputs.cache-hit == false || inputs.invalidate-cache == true
       with:
         repository: nunuazaidi/shed
         ref: ${{env.SHED_VERSION}}
@@ -45,6 +48,7 @@ runs:
         key: ${{env.SHED_VERSION}}-tool
 
     - run: ./md ./.github/compile.sh
+      if: steps.cache-shed-tool.outputs.cache-hit == false || inputs.invalidate-cache == true
       shell: bash
 
     - run: echo "./build/shed/out" >> $GITHUB_PATH
