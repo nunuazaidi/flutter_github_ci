@@ -48,6 +48,7 @@ runs:
         key: ${{env.SHED_VERSION}}-tool
 
     - run: ./md ./.github/compile.sh
+      if: steps.cache-shed-tool.outputs.cache-hit == false || inputs.invalidate-cache == true
       shell: bash
 
     - run: echo "./build/shed/out" >> $GITHUB_PATH
