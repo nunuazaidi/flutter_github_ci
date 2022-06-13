@@ -1,0 +1,28 @@
+name: setup-shed
+
+description: "Set up shed"
+
+runs:
+  using: "composite"
+  steps:
+    - id: cache-shed-src
+      uses: actions/cache@v3
+      with:
+        path: ./build/shed/src
+        key: shed-${{env.SHED_VERSION}}-${{runner.os}}-${{hashFiles('./build/shed/src/pubspec.yaml')}}
+    - uses: actions/checkout@v3
+      if: steps.cache-shed-src.outputs.cache-hit == false
+      with:
+        repository: nunuazaidi/shed
+        ref: ${{env.SHED_VERSION}}
+        ssh-key: ${{secrets.SHED_DEPLOY_KEY}}
+        path: ./build/shed/src
+    - uses: actions/cache@v3
+      id: cache-shed-tool
+      with:
+        path: ./build/shed/out
+        key: ${{env.SHED_VERSION}}-tool
+    - run: ./md ./.github/compile.sh
+      shell: bash
+    - run: echo "./build/shed/out" >> $GITHUB_PATH
+      shell: bash

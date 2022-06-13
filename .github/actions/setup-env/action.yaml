@@ -1,10 +1,9 @@
 name: setup-env
 
-description: "Sets up the environment variables"
+description: "Set up environment variables"
 
 runs:
   using: "composite"
   steps:
-    - name: "Load environment variables..."
-      run: chmod +x ./md && ./md ./.github/config.sh
+    - run: chmod +x ./md && ./md ./.github/config.sh
       shell: bash
