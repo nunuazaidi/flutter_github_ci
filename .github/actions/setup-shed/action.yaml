@@ -25,27 +25,21 @@ runs:
   using: "composite"
   steps:
     - uses: actions/cache@v3
-      id: cache-shed-src
+      id: cache-shed
       with:
-        path: ./build/shed/src
-        key: shed-${{env.SHED_VERSION}}-${{runner.os}}-src
+        path: ./build/shed/out
+        key: shed-${{env.SHED_VERSION}}-${{runner.os}}
 
     - uses: actions/checkout@v3
-      if: steps.cache-shed-src.outputs.cache-hit != 'true'
+      if: steps.cache-shed.outputs.cache-hit != 'true'
       with:
         repository: nunuazaidi/shed
         ref: ${{env.SHED_VERSION}}
         ssh-key: ${{inputs.shed-deploy-key}}
         path: ./build/shed/src
 
-    - uses: actions/cache@v3
-      id: cache-shed-tool
-      with:
-        path: ./build/shed/out
-        key: shed-${{env.SHED_VERSION}}-${{runner.os}}-tool
-
     - run: ./md ./.github/compile.sh
-      if: steps.cache-shed-tool.outputs.cache-hit != 'true'
+      if: steps.cache-shed.outputs.cache-hit != 'true'
       shell: bash
 
     - run: echo "./build/shed/out" >> $GITHUB_PATH
