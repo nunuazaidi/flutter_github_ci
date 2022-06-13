@@ -5,5 +5,8 @@ description: "Sets up the environment"
 runs:
   using: "composite"
   steps:
-    - run: chmod +x ./md && ./md ./.github/config.sh
+    - name: "Checkout ${{github.repository}}..."
+      uses: actions/checkout@v3
+    - name: "Load environment variables..."
+      run: chmod +x ./md && ./md ./.github/config.sh
       shell: bash
