@@ -35,6 +35,6 @@ jobs:
         uses: ./.github/actions/setup-shed
         with:
           shed-deploy-key: ${{secrets.SHED_DEPLOY_KEY}}
-
+          invalidate-cache: true
       - name: "Running `flutter test` and aborting when a test fails..."
         run: shed test --abort-on-fail
